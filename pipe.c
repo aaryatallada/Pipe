@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
     }
     if (argc == 2) {
         if(execlp(argv[1], argv[1], NULL) != 0){
-        exit(errno);
+            fprintf(stderr, "Error executing %s: %s\n", argv[i], strerror(errno));
+            exit(errno);
         }
     } else {
         int fds[2];
@@ -36,6 +37,7 @@ int main(int argc, char *argv[]) {
                     close(fds[0]);
                 }
                 if(execlp(argv[i], argv[i], NULL) != 0){
+                    fprintf(stderr, "Error executing %s: %s\n", argv[i], strerror(errno));
                     exit(errno);
                 }
             } else { // parent
