@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 //                    exit(-1);
 //                }
                 if(status!=0){
-                    perror("child process error  invalid argument.");
+                    perror("child process error invalid argument.");
                     exit(EINVAL);
                 }
             }
