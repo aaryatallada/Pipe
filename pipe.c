@@ -11,8 +11,9 @@ int main(int argc, char *argv[]) {
         exit(errno);
     }
     if (argc == 2) {
-        if(execlp(argv[1], argv[1], NULL) < 0)
-            exit(errno);
+        if(execlp(argv[1], argv[1], NULL) != 0){
+        exit(errno);
+        }
     } else {
         int fds[2];
         
@@ -34,9 +35,8 @@ int main(int argc, char *argv[]) {
                     //dup2(fds[0], STDIN_FILENO);// Redirect stdin to the read end of the pipe
                     close(fds[0]);
                 }
-                if(execlp(argv[i], argv[i], NULL) < 0){
+                if(execlp(argv[i], argv[i], NULL) != 0){
                     exit(errno);
-                    
                 }
             } else { // parent
                 if (i != argc - 1) {
