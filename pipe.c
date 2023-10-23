@@ -55,11 +55,15 @@ int main(int argc, char *argv[]) {
                 if (wpid == -1) {
                     exit(EXIT_FAILURE);
                 }
+
                 if (WIFEXITED(status)) {
                     int exitchild = WEXITSTATUS(status);
+                    exit(exitchild); // Exit the parent with the same exit code as the child
                 } else {
-                    exit(1);
+                    exit(-1); // Exit the parent with a non-zero code to indicate an abnormal termination
                 }
+
+
             }
             else{
                 exit(errno);
