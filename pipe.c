@@ -51,13 +51,10 @@ int main(int argc, char *argv[]) {
                     close(fds[1]);
                 }
                 //close(fds[0]); // Close the read end of the pipe
-                pid_t wpid = waitpid(ret, &status, 0);
-                if (wpid == -1) {
-                    exit(EXIT_FAILURE);
-                }
-                if(!WIFEXITED(status)){
+                if (WIFEXITED(status)) {
                     int exitchild = WEXITSTATUS(status);
-                    exit(exitchild);
+                } else {
+                    exit(1);
                 }
             }
         }
