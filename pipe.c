@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
                 if(execlp(argv[i], argv[i], NULL) != 0){
                     exit(errno);
                 }
-            } else { // parent
+            } else if (ret > 0) { // parent
                 int status;
                 if (i != argc - 1) {
                     close(fds[1]);// Close the write end of the pipe
@@ -61,8 +61,11 @@ int main(int argc, char *argv[]) {
                     exit(1);
                 }
             }
+            else{
+                exit(errno);
+            }
         }
     }
-
+    exit(errno);
     return 0;
 }
