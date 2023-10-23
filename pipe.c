@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
                     close(fds[0]);
                 }
                 if(execlp(argv[i], argv[i], NULL) != 0){
-                    exit(errno);
+                    exit(EINVAL);
                 }
             } else if (ret > 0) { // parent
                 int status;
@@ -55,15 +55,15 @@ int main(int argc, char *argv[]) {
                 if (wpid == -1) {
                     exit(EXIT_FAILURE);
                 }
-
-                if (WIFEXITED(status)) {
-                    int exitchild = WEXITSTATUS(status);
-                    exit(exitchild); // Exit the parent with the same exit code as the child
-                } else {
-                    exit(-1); // Exit the parent with a non-zero code to indicate an abnormal termination
+//                if (WIFEXITED(status)) {
+//                    int exitchild = WEXITSTATUS(status);
+//                } else {
+//                    exit(-1);
+//                }
+                if(status!=0){
+                    perror("child process error  invalid argument.");
+                    exit(EINVAL);
                 }
-
-
             }
             else{
                 exit(errno);
