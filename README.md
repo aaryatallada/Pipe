@@ -1,17 +1,21 @@
-## UID: 123456789
+## UID: 805819572
 
 ## Pipe Up
 
-One sentence description
+Used a loop through all arguments and used child and parent process to manipulate file descriptors of a pipe and STDIN and STDOUT to connect the processes to one another. 
 
 ## Building
 
-Explain briefly how to build your program
+to run my program, you run this command: gcc pipe.c -o pipe for the initial build. Now there is an executable pipe file which you can type:
+./pipe program1 program2 etc... to run. 
+
 
 ## Running
 
-Show an example run of your program, using at least two additional arguments, and what to expect
+./pipe ls cat wc 
+returns:
+6       6      56
 
 ## Cleaning up
 
-Explain briefly how to clean up all binary files
+to clean up run this command: make clean
