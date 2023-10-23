@@ -8,18 +8,21 @@
 int main(int argc, char *argv[]) {
     if(argc == 1){
         errno = EINVAL;
-        exit(1);
+        exit(errno);
     }
     if (argc == 2) {
-        execlp(argv[1], argv[1], NULL);
+        if(execlp(argv[1], argv[1], NULL) == -1)
+            exit(errno);
     } else {
         int fds[2];
         
         for (int i = 1; i < argc; i++) {
-            pipe(fds);
-            // TODO: ERROR CHECK IF pipe() RETURNS -1
-            pid_t ret = fork();
-            // TODO: ERROR CHECK IF fork() RETURNS -1
+            if(pipe(fds) == -1){
+                errno = EBADF;
+                exit(errno); //EBADF
+            }
+            if(pid_t ret = fork() == -1)
+                exit(errno);
             if (ret == 0) { // child
                 if (i != argc - 1) {
                     close(fds[0]); // Close the read end of the pipe
