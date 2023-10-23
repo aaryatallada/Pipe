@@ -34,8 +34,8 @@ int main(int argc, char *argv[]) {
                     //dup2(fds[0], STDIN_FILENO);// Redirect stdin to the read end of the pipe
                     close(fds[0]);
                 }
-                execlp(argv[i], argv[i], NULL);
-                // TODO: ERROR CHECK IF execlp() RETURNS -1
+                if(execlp(argv[i], argv[i], NULL) == -1)
+                    exit(errno);
             } else { // parent
                 if (i != argc - 1) {
                     close(fds[1]);// Close the write end of the pipe
