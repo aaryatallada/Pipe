@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
-#include <string.h>
 //last prg should not have a pipe
 int main(int argc, char *argv[]) {
     if(argc == 1){
@@ -13,7 +12,6 @@ int main(int argc, char *argv[]) {
     }
     if (argc == 2) {
         if(execlp(argv[1], argv[1], NULL) != 0){
-            fprintf(stderr, "Error executing %s: %s\n", argv[1], strerror(errno));
             exit(errno);
         }
     } else {
@@ -38,10 +36,10 @@ int main(int argc, char *argv[]) {
                     close(fds[0]);
                 }
                 if(execlp(argv[i], argv[i], NULL) != 0){
-                    fprintf(stderr, "Error executing %s: %s\n", argv[i], strerror(errno));
                     exit(errno);
                 }
             } else { // parent
+                int status;
                 if (i != argc - 1) {
                     close(fds[1]);// Close the write end of the pipe
                     dup2(fds[0], STDIN_FILENO);
@@ -53,7 +51,14 @@ int main(int argc, char *argv[]) {
                     close(fds[1]);
                 }
                 //close(fds[0]); // Close the read end of the pipe
-                waitpid(ret, NULL, 0);
+                pid_t wpid = waitpid(ret, &status, 0);
+                if (wpid == -1) {
+                    exit(EXIT_FAILURE);
+                }
+                if(!WIFEXITED(status)){
+                    int exitchild = WEXITSTATUS(status);
+                    exit(exitchild);
+                }
             }
         }
     }
