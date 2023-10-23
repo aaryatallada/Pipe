@@ -21,7 +21,8 @@ int main(int argc, char *argv[]) {
                 errno = EBADF;
                 exit(errno); //EBADF
             }
-            if(pid_t ret = fork() == -1)
+            pid_t ret = fork();
+            if(ret == -1)
                 exit(errno);
             if (ret == 0) { // child
                 if (i != argc - 1) {
